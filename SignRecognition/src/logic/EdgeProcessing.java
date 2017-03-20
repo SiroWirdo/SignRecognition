@@ -30,7 +30,7 @@ import org.opencv.imgproc.Imgproc;
 public class EdgeProcessing {
 
 
-	public BufferedImage[] edgeDetector(BufferedImage image, String color, BufferedImage orginal){
+	public BufferedImage[] edgeDetector(BufferedImage image, String color, String shape, BufferedImage orginal){
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
 		int lower_threshold = 50;
@@ -58,14 +58,18 @@ public class EdgeProcessing {
 		Mat fin = new Mat();
 		Result finResult = null;
 		if(color.equals("blue")){
-			//finResult = circleDetector(dst, detected_edges, matImage, image.getHeight(), image.getWidth(), image);
-			finResult = rectangleDetector(dst, detected_edges, matImage, image.getHeight(), image.getWidth(), image);	
+			if(shape.equals("circle")){
+				finResult = circleDetector(dst, detected_edges, matImage, image.getHeight(), image.getWidth(), image);
+			}else{
+				finResult = rectangleDetector(dst, detected_edges, matImage, image.getHeight(), image.getWidth(), image);	
+			}
+			
 			fin = finResult.getMatImage();
 		}
 
-		/*	if(color.equals("red")){
-
-		}*/
+		if(color.equals("red")){
+			finResult = circleDetector(dst, detected_edges, matImage, image.getHeight(), image.getWidth(), image);
+		}
 
 		if(color.equals("yellow")){
 			finResult = triangleDetector(dst, detected_edges, matImage, image.getHeight(), image.getWidth(), image);
@@ -103,11 +107,12 @@ public class EdgeProcessing {
 						Rect rect = Imgproc.boundingRect(contours.get(i));
 						if(rect.width > 30 && rect.height > 30){
 							Imgproc.rectangle(fin, new Point(rect.x,rect.y), new Point(rect.x+rect.width,rect.y+rect.height),new Scalar(0,0,255));
-							Result result = cutAndCheckSign(original, rect, true);
+						/** Rozpoznanie znaku */
+							/*	Result result = cutAndCheckSign(original, rect, true);
 							if(result.getDiff() < minResult.getDiff()){
 								minResult.setIndex(result.getIndex());
 								minResult.setDiff(result.getDiff());
-							}
+							}*/
 						}
 					}
 				}
@@ -117,14 +122,15 @@ public class EdgeProcessing {
 
 		ArrayList<BufferedImage> rects = Settings.SIGNS_EXAMPLES.getRectsResult();
 		BufferedImage rect = null;
-		if(minResult.getIndex() >= 0){
+	/** Rozpoznanie znaku **/
+		/*	if(minResult.getIndex() >= 0){
 			rect = rects.get(minResult.getIndex());
-		//	System.out.println(minResult.getDiff());
+			System.out.print(minResult.getDiff() + " " + minResult.getIndex() + " ");
 		}else{
 			//	rect = new BufferedImage(86, 86, BufferedImage.TYPE_3BYTE_BGR);
-		}
+		}*/
 
-		Result finResult = new Result(fin, rect);
+		Result finResult = new Result(fin, null);
 		return finResult;
 	}
 
@@ -148,11 +154,12 @@ public class EdgeProcessing {
 					Rect rect = Imgproc.boundingRect(contours.get(i));
 					if(rect.width > 30 && rect.height > 30){
 						Imgproc.rectangle(fin, new Point(rect.x,rect.y), new Point(rect.x+rect.width,rect.y+rect.height),new Scalar(0,0,255));
-						Result result = cutAndCheckSign(original, rect, false);
+						/** Rozpoznanie znaku **/
+						/*Result result = cutAndCheckSign(original, rect, false);
 						if(result.getDiff() < minResult.getDiff()){
 							minResult.setIndex(result.getIndex());
 							minResult.setDiff(result.getDiff());
-						}
+						}*/
 					}
 
 				}
@@ -161,14 +168,15 @@ public class EdgeProcessing {
 
 		ArrayList<BufferedImage> triangles = Settings.SIGNS_EXAMPLES.getTrianglesResult();
 		BufferedImage triangle = null;
-		if(minResult.getIndex() >= 0){
+		/* Rozpoznanie znaku */
+		/*if(minResult.getIndex() >= 0){
 			triangle = triangles.get(minResult.getIndex());
-		//	System.out.println(minResult.getDiff());
+			//	System.out.println(minResult.getDiff());
 		}else{
 			//	triangle = new BufferedImage(90, 80, BufferedImage.TYPE_3BYTE_BGR);
-		}
+		}*/
 
-		Result finResult = new Result(fin, triangle);
+		Result finResult = new Result(fin, null);
 		return finResult;
 	}
 
@@ -199,13 +207,13 @@ public class EdgeProcessing {
 				int y2 = (int)pt.y + radius;
 
 				Imgproc.circle(fin, pt, radius, new Scalar(0,255,0), 2);
-
-				Result result = cutAndCheckSign(original, x1 - 2, y1 - 2, x2 + 2, y2 + 2, pt, radius + 2);
+				/** Rozpoznanie znaku **/
+			/*	Result result = cutAndCheckSign(original, x1 - 2, y1 - 2, x2 + 2, y2 + 2, pt, radius + 2);
 
 				if(result.getDiff() < minResult.getDiff()){
 					minResult.setIndex(result.getIndex());
 					minResult.setDiff(result.getDiff());
-				}
+				}*/
 			}
 			radius *= 1.8;
 			if(radius >= minRadius && radius <= maxRadius){
@@ -215,12 +223,12 @@ public class EdgeProcessing {
 				int y2 = (int)pt.y + radius;
 
 				Imgproc.circle(fin, pt, radius+5, new Scalar(0,255,0), 2);
-
-				Result result = cutAndCheckSign(original, x1 - 2, y1 - 2, x2 + 2, y2 + 2, pt, radius + 2);
+				/** Rozpoznanie znaku **/
+			/*	Result result = cutAndCheckSign(original, x1 - 2, y1 - 2, x2 + 2, y2 + 2, pt, radius + 2);
 				if(result.getDiff() < minResult.getDiff()){
 					minResult.setIndex(result.getIndex());
 					minResult.setDiff(result.getDiff());
-				}
+				}*/
 			}
 		}
 
@@ -239,12 +247,12 @@ public class EdgeProcessing {
 				int x2 = (int)pt.x + radius;
 				int y2 = (int)pt.y + radius;
 				Imgproc.circle(fin, pt, radius+2, new Scalar(0,255,0), 2);
-
-				Result result = cutAndCheckSign(original, x1 - 2, y1 - 2, x2 + 2, y2 + 2, pt, radius + 2);
+				/** Rozpoznanie znaku **/
+			/*	Result result = cutAndCheckSign(original, x1 - 2, y1 - 2, x2 + 2, y2 + 2, pt, radius + 2);
 				if(result.getDiff() < minResult.getDiff()){
 					minResult.setIndex(result.getIndex());
 					minResult.setDiff(result.getDiff());
-				}
+				}*/
 			}
 
 			if(radius >= minRadius && radius <= maxRadius){
@@ -254,25 +262,27 @@ public class EdgeProcessing {
 				int x2 = (int)pt.x + radius;
 				int y2 = (int)pt.y + radius;
 				Imgproc.circle(fin, pt, radius+2, new Scalar(0,255,0), 2);
-
-				Result result = cutAndCheckSign(original, x1 - 2, y1 - 2, x2 + 2, y2 + 2, pt, radius + 2);
+				
+				/** Rozpoznanie znaku **/
+				/*Result result = cutAndCheckSign(original, x1 - 2, y1 - 2, x2 + 2, y2 + 2, pt, radius + 2);
 				if(result.getDiff() < minResult.getDiff()){
 					minResult.setIndex(result.getIndex());
 					minResult.setDiff(result.getDiff());
-				}
+				}*/
 			}
 		}
 
 		ArrayList<BufferedImage> circles = Settings.SIGNS_EXAMPLES.getCirclesResult();
 		BufferedImage circle = null;
-		if(minResult.getIndex() >= 0){
+	/** Rozpoznanie znaku **/
+		/*	if(minResult.getIndex() >= 0){
 			circle = circles.get(minResult.getIndex());
-		//	System.out.println(minResult.getDiff());
+			//	System.out.println(minResult.getDiff());
 		}else{
 			//		circle = new BufferedImage(86, 86, BufferedImage.TYPE_3BYTE_BGR);
-		}
+		}*/
 
-		Result finResult = new Result(fin, circle);
+		Result finResult = new Result(fin, null);
 		return finResult;
 	}
 

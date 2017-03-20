@@ -46,7 +46,7 @@ public class ColorProcessing {
 		return hsi;
 	}
 
-	public BufferedImage colorBinarization(BufferedImage image, int col){
+	public BufferedImage colorBinarization(BufferedImage image, String color){
 		BufferedImage newImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
 		//long fintime = 0;
 	//	System.out.println(image.getHeight() + " " + image.getWidth());
@@ -59,7 +59,7 @@ public class ColorProcessing {
 				float[] hsi = convRGBHSI(rgbArray);
 				//long time2 = System.currentTimeMillis();
 				//fintime += (time2 - time);
-				if(col == 1){
+				if(color.equals("red")){
 					if(((hsi[0] >= 0 && hsi[0] <= 24) || (hsi[0] >= 60 && hsi[0] <= 66)) &&
 							hsi[1] >= 11 && hsi[1] <= 42 && hsi[2] >= 67 && hsi[2] <= 97){
 						newImage.setRGB(i, j, Color.RED.getRGB());
@@ -68,7 +68,7 @@ public class ColorProcessing {
 					}
 				}
 
-				if(col == 2){
+				if(color.equals("yellow")){
 					if(hsi[0] >= 31 && hsi[0] <= 62 && hsi[2] >= 30 && hsi[2] <= 210){
 						newImage.setRGB(i, j, Color.YELLOW.getRGB());
 					}else{
@@ -76,7 +76,7 @@ public class ColorProcessing {
 					}
 				}
 
-				if(col == 3){
+				if(color.equals("blue")){
 					if(hsi[0] >= 195 && hsi[0] <= 220 && ((hsi[2] >= 40 && hsi[2] <= 79) || (hsi[2] >= 90 && hsi[2] <= 125))){
 						newImage.setRGB(i, j, Color.BLUE.getRGB());
 					}else{

@@ -21,7 +21,7 @@ public class FileController {
 		edgeProcessing = new EdgeProcessing();
 	}
 	
-	public BufferedImage[] start(String path){
+	public BufferedImage[] start(String path, String color, String shape){
 		File file = new File(path);
 		BufferedImage image = null;
 		try {
@@ -33,7 +33,7 @@ public class FileController {
 			System.exit(0);
 		}
 		
-		BufferedImage hsiImage = colorProcessing.colorBinarization(image, 3);
+		BufferedImage hsiImage = colorProcessing.colorBinarization(image, color);
 		
 		File outputfile = new File(Settings.RESULT_PATH + "newImage.jpg");
 		try {
@@ -43,7 +43,7 @@ public class FileController {
 			e.printStackTrace();
 		}
 		System.out.println("stop1");
-		BufferedImage[] edgeImage = edgeProcessing.edgeDetector(hsiImage, "blue", image);
+		BufferedImage[] edgeImage = edgeProcessing.edgeDetector(hsiImage, color, shape, image);
 		
 		BufferedImage[] finalIm = new BufferedImage[3];
 		finalIm[0] = image;
@@ -53,12 +53,12 @@ public class FileController {
 		return finalIm;
 	}
 	
-	public BufferedImage[] start(BufferedImage image){
+	public BufferedImage[] start(BufferedImage image, String color, String shape){
 		//long time1= System.currentTimeMillis();
-		BufferedImage hsiImage = colorProcessing.colorBinarization(image, 3);
+		BufferedImage hsiImage = colorProcessing.colorBinarization(image, color);
 	//	long time2= System.currentTimeMillis();
 		//System.out.println("czas koloru: " + (time2 - time1));
-		BufferedImage[] edgeImage = edgeProcessing.edgeDetector(hsiImage, "blue", image);
+		BufferedImage[] edgeImage = edgeProcessing.edgeDetector(hsiImage, color, shape, image);
 	//	long time3= System.currentTimeMillis();
 	//	System.out.println("czas krawedzi: " + (time3 - time2));
 		

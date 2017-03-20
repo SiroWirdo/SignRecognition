@@ -24,12 +24,18 @@ public class Main {
 
 	public static void main(String[] args){
 		Main main = new Main();
-		main.startVideo("c:/Studia/Systemy wizyjne/wideo/20160117_114443.mp4", 300);
+		String video = "20160117_111955.mp4";
+		String path = "c:/Studia/magisterka2/Systemy wizyjne/wideo/";
+		String color = "blue";
+		String shape = "circle";
+		int start = 300;
+		int length = 300;
+		main.startVideo(path + video, start, length, color, shape);
 		//main.startImage(Settings.SOURCE_PATH + "3.png");
 
 	}
 
-	public void startVideo(String video, int start){
+	public void startVideo(String video, int start, int length, String color, String shape){
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
 		MainMenu menu = MainMenu.getMainMenu();
@@ -41,12 +47,12 @@ public class Main {
 		Mat frame = vidControl.getNextFrame();
 		int temp = 0;
 
-		while(!frame.empty() && temp < 200){
+		while(!frame.empty() && temp < length){
 		//	long time = System.currentTimeMillis();
 			BufferedImage image = toBufferedImage(frame);
 			image = cutImage(image);
 			FileController controller = new FileController();
-			BufferedImage[] result = controller.start(image);
+			BufferedImage[] result = controller.start(image, color, shape);
 			BufferedImage newImage = result[0];
 			BufferedImage newImage2 = result[1];
 			fillImage(image, newImage);			
@@ -62,9 +68,9 @@ public class Main {
 		}
 	}
 
-	public void startImage(String image){
+	public void startImage(String image, String color, String shape){
 		FileController controller = new FileController();
-		BufferedImage[] newImage = controller.start(image);
+		BufferedImage[] newImage = controller.start(image, color, shape);
 		fillImage(newImage[0], newImage[1]);
 
 		File outputfile = new File(Settings.RESULT_PATH + "finalImage.jpg");
