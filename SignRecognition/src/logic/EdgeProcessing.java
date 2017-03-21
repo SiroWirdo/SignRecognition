@@ -100,28 +100,26 @@ public class EdgeProcessing {
 			approx.convertTo(temp, CvType.CV_32S);
 			if(Math.abs(Imgproc.contourArea(contours.get(i))) > 100 || !Imgproc.isContourConvex((temp))){
 
-				if(approx.rows() >= 4 && approx.rows() <= 6){
-					int vtc = approx.rows();
-
-					if(vtc == 4){
+				if(approx.rows() == 4){
 						Rect rect = Imgproc.boundingRect(contours.get(i));
-						if(rect.width > 30 && rect.height > 30){
-							Imgproc.rectangle(fin, new Point(rect.x,rect.y), new Point(rect.x+rect.width,rect.y+rect.height),new Scalar(0,0,255));
-						/** Rozpoznanie znaku */
+						double difference = Math.abs(rect.width - rect.height);
+						
+						if(rect.width > 30 && rect.height > 30 && difference <= 10){
+							System.out.println("Difference = " + difference);
+							Imgproc.rectangle(fin, new Point(rect.x,rect.y), new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(0,0,255));
+						/** Rozpoznanie znaku **/
 							/*	Result result = cutAndCheckSign(original, rect, true);
 							if(result.getDiff() < minResult.getDiff()){
 								minResult.setIndex(result.getIndex());
 								minResult.setDiff(result.getDiff());
 							}*/
 						}
-					}
 				}
-
 			}
 		}
 
-		ArrayList<BufferedImage> rects = Settings.SIGNS_EXAMPLES.getRectsResult();
-		BufferedImage rect = null;
+	//	ArrayList<BufferedImage> rects = Settings.SIGNS_EXAMPLES.getRectsResult();
+	//	BufferedImage rect = null;
 	/** Rozpoznanie znaku **/
 		/*	if(minResult.getIndex() >= 0){
 			rect = rects.get(minResult.getIndex());
@@ -151,23 +149,35 @@ public class EdgeProcessing {
 			approx.convertTo(temp, CvType.CV_32S);
 			if(Math.abs(Imgproc.contourArea(contours.get(i))) > 100 || !Imgproc.isContourConvex((temp))){
 				if(approx.rows() == 3){
-					Rect rect = Imgproc.boundingRect(contours.get(i));
-					if(rect.width > 30 && rect.height > 30){
-						Imgproc.rectangle(fin, new Point(rect.x,rect.y), new Point(rect.x+rect.width,rect.y+rect.height),new Scalar(0,0,255));
-						/** Rozpoznanie znaku **/
-						/*Result result = cutAndCheckSign(original, rect, false);
+					Point[] points = approx.toArray();
+					double edge1 = Math.sqrt((points[1].x - points[0].x)*(points[1].x - points[0].x) + (points[1].y - points[0].y)*(points[1].y - points[0].y));
+					double edge2 = Math.sqrt((points[2].x - points[1].x)*(points[2].x - points[1].x) + (points[2].y - points[1].y)*(points[2].y - points[1].y));
+					double edge3 = Math.sqrt((points[0].x - points[2].x)*(points[0].x - points[2].x) + (points[0].y - points[2].y)*(points[0].y - points[2].y));
+					
+					double difference = edge1 - edge2 - edge3;
+					double mean = (edge1 + edge2 + edge3)/3;
+					
+					if(difference >= (-1 * mean - 8) && difference <= (-1 * mean + 8)){
+						System.out.println("Edges = " + edge1 + " " + edge2 + " " + edge3 + " " + difference + " " + mean);
+
+						Rect rect = Imgproc.boundingRect(contours.get(i));
+						if(rect.width > 30 && rect.height > 30){
+							Imgproc.rectangle(fin, new Point(rect.x,rect.y), new Point(rect.x+rect.width,rect.y+rect.height),new Scalar(0,0,255));
+							/** Rozpoznanie znaku **/
+							/*Result result = cutAndCheckSign(original, rect, false);
 						if(result.getDiff() < minResult.getDiff()){
 							minResult.setIndex(result.getIndex());
 							minResult.setDiff(result.getDiff());
 						}*/
+						}
 					}
 
 				}
 			}
 		}
 
-		ArrayList<BufferedImage> triangles = Settings.SIGNS_EXAMPLES.getTrianglesResult();
-		BufferedImage triangle = null;
+	//	ArrayList<BufferedImage> triangles = Settings.SIGNS_EXAMPLES.getTrianglesResult();
+	// triangle = null;
 		/* Rozpoznanie znaku */
 		/*if(minResult.getIndex() >= 0){
 			triangle = triangles.get(minResult.getIndex());
@@ -272,8 +282,8 @@ public class EdgeProcessing {
 			}
 		}
 
-		ArrayList<BufferedImage> circles = Settings.SIGNS_EXAMPLES.getCirclesResult();
-		BufferedImage circle = null;
+	//	ArrayList<BufferedImage> circles = Settings.SIGNS_EXAMPLES.getCirclesResult();
+	//	BufferedImage circle = null;
 	/** Rozpoznanie znaku **/
 		/*	if(minResult.getIndex() >= 0){
 			circle = circles.get(minResult.getIndex());
