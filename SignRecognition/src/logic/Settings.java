@@ -17,5 +17,6 @@ public class Settings {
 	public static String RESULT_RECT_SIGNS_PATH = "c:/Studia/Systemy Wizyjne/pictures/wyniki znaki/kwadratowe/";
 	public static String RESULT_TRIANGLE_SIGNS_PATH = "c:/Studia/Systemy Wizyjne/pictures/wyniki znaki/trojkaty/";
 	public static SignExamples SIGNS_EXAMPLES = new SignExamples();
+	public static boolean USE_CANNY = false;
 
 }

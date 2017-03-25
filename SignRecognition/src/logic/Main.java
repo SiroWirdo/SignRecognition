@@ -24,11 +24,11 @@ public class Main {
 
 	public static void main(String[] args){
 		Main main = new Main();
-		String video = "20151026_105848.mp4";
+		String video = "1.mp4";
 		String path = "c:/Studia/magisterka2/Systemy wizyjne/wideo/";
-		String color = "blue";
-		String shape = "rectangle";
-		int start = 200;
+		String color = "red";
+		String shape = "circle";
+		int start = 100;
 		int length = 300;
 		main.startVideo(path + video, start, length, color, shape);
 		//main.startImage(Settings.SOURCE_PATH + "3.png");

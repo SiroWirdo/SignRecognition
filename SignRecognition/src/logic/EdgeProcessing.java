@@ -51,7 +51,10 @@ public class EdgeProcessing {
 		Imgproc.cvtColor(matImage, matImage, Imgproc.COLOR_RGB2GRAY);
 
 		Imgproc.blur(matImage, detected_edges, new Size(kernel_size,kernel_size) );
-		Imgproc.Canny( detected_edges, detected_edges, lower_threshold, upper_threshold, kernel_size, false);
+		
+		if(Settings.USE_CANNY){
+			Imgproc.Canny( detected_edges, detected_edges, lower_threshold, upper_threshold, kernel_size, false);
+		}
 
 		Mat dst = new Mat(image.getHeight(), image.getWidth(), CvType.CV_8UC3, new Scalar(0));
 		matImage.copyTo( dst, detected_edges);
@@ -69,6 +72,7 @@ public class EdgeProcessing {
 
 		if(color.equals("red")){
 			finResult = circleDetector(dst, detected_edges, matImage, image.getHeight(), image.getWidth(), image);
+			fin = finResult.getMatImage();
 		}
 
 		if(color.equals("yellow")){
@@ -225,6 +229,8 @@ public class EdgeProcessing {
 					minResult.setDiff(result.getDiff());
 				}*/
 			}
+			
+			/*
 			radius *= 1.8;
 			if(radius >= minRadius && radius <= maxRadius){
 				int x1 = (int)pt.x - radius;
@@ -238,8 +244,8 @@ public class EdgeProcessing {
 				if(result.getDiff() < minResult.getDiff()){
 					minResult.setIndex(result.getIndex());
 					minResult.setDiff(result.getDiff());
-				}*/
-			}
+				}
+			}*/
 		}
 
 		for (int x = 0; x < lines.rows(); x++){
@@ -264,7 +270,7 @@ public class EdgeProcessing {
 					minResult.setDiff(result.getDiff());
 				}*/
 			}
-
+/*
 			if(radius >= minRadius && radius <= maxRadius){
 				radius *= 1.8;
 				int x1 = (int)pt.x - radius;
@@ -278,8 +284,8 @@ public class EdgeProcessing {
 				if(result.getDiff() < minResult.getDiff()){
 					minResult.setIndex(result.getIndex());
 					minResult.setDiff(result.getDiff());
-				}*/
-			}
+				}
+			}*/
 		}
 
 	//	ArrayList<BufferedImage> circles = Settings.SIGNS_EXAMPLES.getCirclesResult();

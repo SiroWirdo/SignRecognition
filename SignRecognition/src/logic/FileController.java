@@ -55,7 +55,7 @@ public class FileController {
 	
 	public BufferedImage[] start(BufferedImage image, String color, String shape){
 		//long time1= System.currentTimeMillis();
-		BufferedImage hsiImage = colorProcessing.colorBinarization(image, color);
+		BufferedImage hsiImage = colorProcessing.colorBinarizationRGB(image, color);
 	//	long time2= System.currentTimeMillis();
 		//System.out.println("czas koloru: " + (time2 - time1));
 		BufferedImage[] edgeImage = edgeProcessing.edgeDetector(hsiImage, color, shape, image);

@@ -19,6 +19,7 @@ public class ColorProcessing {
 
 		float[] hsi = new float[3];
 		float h = 0;
+		float s = 0;
 
 
 		int b = rgb[2];
@@ -28,6 +29,11 @@ public class ColorProcessing {
 		int bgr = b + g + r;
 		float in = bgr / 3;
 
+		if(in != 0){
+			int min = Math.min(r,g);
+			min = Math.min(min, b);
+			s = 1 - min/in;
+		}
 
 		float x = (float) ((r - 0.5 * g - 0.5 * b) / Math.sqrt(r * r + g * g
 				+ b * b - r * g - r * b - g * b));
@@ -41,6 +47,7 @@ public class ColorProcessing {
 
 
 		hsi[0] = h;
+		hsi[1] = s;
 		hsi[2] = in;
 
 		return hsi;
@@ -60,8 +67,7 @@ public class ColorProcessing {
 				//long time2 = System.currentTimeMillis();
 				//fintime += (time2 - time);
 				if(color.equals("red")){
-					if(((hsi[0] >= 0 && hsi[0] <= 24) || (hsi[0] >= 60 && hsi[0] <= 66)) &&
-							hsi[1] >= 11 && hsi[1] <= 42 && hsi[2] >= 67 && hsi[2] <= 97){
+					if(hsi[0] <= 10 || hsi[0] >= 300){
 						newImage.setRGB(i, j, Color.RED.getRGB());
 					}else{
 						newImage.setRGB(i, j, Color.BLACK.getRGB());
@@ -84,6 +90,35 @@ public class ColorProcessing {
 					}
 				}
 
+			}
+		}
+	//	System.out.println("final time: " + fintime);
+		return newImage;
+	}
+	
+	public BufferedImage colorBinarizationRGB(BufferedImage image, String color){
+		BufferedImage newImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
+		//long fintime = 0;
+	//	System.out.println(image.getHeight() + " " + image.getWidth());
+		for(int j = 0; j < image.getHeight(); j++){
+			for(int i = 0; i < image.getWidth(); i++){
+
+				int[] rgbArray =  image.getRaster().getPixel(i, j, new int[3]);
+				int r = rgbArray[0];
+				int g = rgbArray[1];
+				int b = rgbArray[2];
+				int s = rgbArray[0] + rgbArray[1] + rgbArray[2];
+				
+				double min = Math.min(r - g, r - b);
+				double res = Math.max(0, min/s);
+
+				if(color.equals("red")){
+					if(res > 0){
+						newImage.setRGB(i, j, Color.RED.getRGB());
+					}else{
+						newImage.setRGB(i, j, Color.BLACK.getRGB());
+					}
+				}
 			}
 		}
 	//	System.out.println("final time: " + fintime);
