@@ -26,16 +26,17 @@ public class Main {
 		Main main = new Main();
 		String video = "1.mp4";
 		String path = "c:/Studia/magisterka2/Systemy wizyjne/wideo/";
-		String color = "red";
-		String shape = "circle";
-		int start = 100;
+		String color = "yellow";
+		String shape = "triangle";
+		String colorMethod = "";
+		int start = 2310;
 		int length = 300;
-		main.startVideo(path + video, start, length, color, shape);
+		main.startVideo(path + video, start, length, color, shape, colorMethod);
 		//main.startImage(Settings.SOURCE_PATH + "3.png");
 
 	}
 
-	public void startVideo(String video, int start, int length, String color, String shape){
+	public void startVideo(String video, int start, int length, String color, String shape, String colorMethod){
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
 		MainMenu menu = MainMenu.getMainMenu();
@@ -52,7 +53,7 @@ public class Main {
 			BufferedImage image = toBufferedImage(frame);
 			image = cutImage(image);
 			FileController controller = new FileController();
-			BufferedImage[] result = controller.start(image, color, shape);
+			BufferedImage[] result = controller.start(image, color, shape, colorMethod);
 			BufferedImage newImage = result[0];
 			BufferedImage newImage2 = result[1];
 			fillImage(image, newImage);			

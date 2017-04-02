@@ -105,19 +105,19 @@ public class EdgeProcessing {
 			if(Math.abs(Imgproc.contourArea(contours.get(i))) > 100 || !Imgproc.isContourConvex((temp))){
 
 				if(approx.rows() == 4){
-						Rect rect = Imgproc.boundingRect(contours.get(i));
-						double difference = Math.abs(rect.width - rect.height);
-						
-						if(rect.width > 30 && rect.height > 30 && difference <= 10){
-							System.out.println("Difference = " + difference);
-							Imgproc.rectangle(fin, new Point(rect.x,rect.y), new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(0,0,255));
+					Rect rect = Imgproc.boundingRect(contours.get(i));
+					double difference = Math.abs(rect.width - rect.height);
+
+					if(rect.width > 30 && rect.height > 30 && difference <= 10){
+				//		System.out.println("Difference = " + difference);
+						Imgproc.rectangle(fin, new Point(rect.x,rect.y), new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(0,0,255));
 						/** Rozpoznanie znaku **/
-							/*	Result result = cutAndCheckSign(original, rect, true);
+						/*	Result result = cutAndCheckSign(original, rect, true);
 							if(result.getDiff() < minResult.getDiff()){
 								minResult.setIndex(result.getIndex());
 								minResult.setDiff(result.getDiff());
 							}*/
-						}
+					}
 				}
 			}
 		}
@@ -162,7 +162,7 @@ public class EdgeProcessing {
 					double mean = (edge1 + edge2 + edge3)/3;
 					
 					if(difference >= (-1 * mean - 8) && difference <= (-1 * mean + 8)){
-						System.out.println("Edges = " + edge1 + " " + edge2 + " " + edge3 + " " + difference + " " + mean);
+				//		System.out.println("Edges = " + edge1 + " " + edge2 + " " + edge3 + " " + difference + " " + mean);
 
 						Rect rect = Imgproc.boundingRect(contours.get(i));
 						if(rect.width > 30 && rect.height > 30){
@@ -200,7 +200,7 @@ public class EdgeProcessing {
 		int maxRadius = 80;
 
 		Mat lines = new Mat();
-		Imgproc.HoughCircles(detected_edges, lines, Imgproc.CV_HOUGH_GRADIENT, 1, detected_edges.rows()/2, 100, 25, 15, 50);
+		Imgproc.HoughCircles(detected_edges, lines, Imgproc.CV_HOUGH_GRADIENT, 1, 100, 100, 25, 15, 50);
 
 		Mat fin = new Mat(heigh, width, CvType.CV_8UC3, new Scalar(0));
 
