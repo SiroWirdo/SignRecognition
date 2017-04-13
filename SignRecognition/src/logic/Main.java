@@ -26,13 +26,13 @@ public class Main {
 		Main main = new Main();
 		String video = "1.mp4";
 		String path = "c:/Studia/magisterka2/Systemy wizyjne/wideo/";
-		String color = "yellow";
+		String color = "red";
 		String shape = "triangle";
 		String colorMethod = "";
 		int start = 2310;
 		int length = 300;
-		main.startVideo(path + video, start, length, color, shape, colorMethod);
-		//main.startImage(Settings.SOURCE_PATH + "3.png");
+		//main.startVideo(path + video, start, length, color, shape, colorMethod);
+		main.startImage(Settings.SOURCE_PATH + "02 PM 001.png", color, shape);
 
 	}
 

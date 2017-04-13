@@ -60,7 +60,7 @@ public class ColorProcessing {
 		for(int j = 0; j < image.getHeight(); j++){
 			for(int i = 0; i < image.getWidth(); i++){
 
-				int[] rgbArray =  image.getRaster().getPixel(i, j, new int[3]);
+				int[] rgbArray =  image.getRaster().getPixel(i, j, new int[image.getRaster().getNumBands()]);
 
 			//	long time = System.currentTimeMillis();
 				float[] hsi = convRGBHSI(rgbArray);

@@ -71,8 +71,13 @@ public class EdgeProcessing {
 		}
 
 		if(color.equals("red")){
-			finResult = circleDetector(dst, detected_edges, matImage, image.getHeight(), image.getWidth(), image);
+			if(shape.equals("circle")){
+				finResult = circleDetector(dst, detected_edges, matImage, image.getHeight(), image.getWidth(), image);
+			}else{
+				
+			}
 			fin = finResult.getMatImage();
+			
 		}
 
 		if(color.equals("yellow")){
@@ -87,7 +92,7 @@ public class EdgeProcessing {
 		BufferedImage[] toReturn = {convertedImg, finResult.getBuffImage()};
 		return toReturn;
 	}
-
+	
 	public Result rectangleDetector(Mat dst, Mat detected_edges, Mat matImage, int heigh, int width, BufferedImage original){
 		MatOfPoint2f approx = new MatOfPoint2f();
 		Result minResult = new Result(-1, 80);

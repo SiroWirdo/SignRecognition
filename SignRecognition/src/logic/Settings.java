@@ -1,8 +1,8 @@
 package logic;
 
 public class Settings {
-	public static String SOURCE_PATH = "c:/Studia/Systemy Wizyjne/pictures/";
-	public static String RESULT_PATH = "c:/Studia/Systemy Wizyjne/pictures/results/";
+	public static String SOURCE_PATH = "c:/Studia/magisterka2/Systemy Wizyjne/pictures/";
+	public static String RESULT_PATH = "c:/Studia/magisterka2/Systemy Wizyjne/pictures/results/";
 	public static int MAX_WINDOW_WIDTH = 1140;
 	public static int MAX_WINDOW_HEIGH = 700;
 	public static int MAX_SIGN_WINDOW_WIDTH = 100;

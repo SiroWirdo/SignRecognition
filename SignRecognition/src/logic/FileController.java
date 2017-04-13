@@ -54,7 +54,6 @@ public class FileController {
 	}
 
 	public BufferedImage[] start(BufferedImage image, String color, String shape, String colorMethod){
-		//long time1= System.currentTimeMillis();
 		BufferedImage hsiImage = null;
 
 		switch(colorMethod){
@@ -72,17 +71,12 @@ public class FileController {
 			break;
 		}
 
-		//	long time2= System.currentTimeMillis();
-		//System.out.println("czas koloru: " + (time2 - time1));
 		BufferedImage[] edgeImage = edgeProcessing.edgeDetector(hsiImage, color, shape, image);
-		//	long time3= System.currentTimeMillis();
-		//	System.out.println("czas krawedzi: " + (time3 - time2));
 
 		return edgeImage;
 	}
 
 	public void displayImage(Image img2){   
-		//BufferedImage img=ImageIO.read(new File("/HelloOpenCV/lena.png"));
 		ImageIcon icon=new ImageIcon(img2);
 		JFrame frame=new JFrame();
 		frame.setLayout(new FlowLayout());        
