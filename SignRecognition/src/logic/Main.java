@@ -25,14 +25,21 @@ public class Main {
 	public static void main(String[] args){
 		Main main = new Main();
 		String video = "1.mp4";
-		String path = "c:/Studia/magisterka2/Systemy wizyjne/wideo/";
+		String path = "c:/Studia/magisterka2/Systemy wizyjne/wideo/czerok/";
 		String color = "red";
-		String shape = "triangle";
-		String colorMethod = "";
+		String shape = "rectangle";
+		String colorMethod = "hsi";
 		int start = 2310;
 		int length = 300;
-		//main.startVideo(path + video, start, length, color, shape, colorMethod);
-		main.startImage(Settings.SOURCE_PATH + "02 PM 001.png", color, shape);
+		File file = new File(path);
+		File[] filesList = file.listFiles();
+		
+		for(File f : filesList){
+			video = f.getName();
+			System.out.println(video);
+			main.startVideo(path + video, start, length, color, shape, colorMethod);
+		}
+		//main.startImage(Settings.SOURCE_PATH + "02 PM 001.png", color, shape);
 
 	}
 
@@ -48,23 +55,27 @@ public class Main {
 		Mat frame = vidControl.getNextFrame();
 		int temp = 0;
 
-		while(!frame.empty() && temp < length){
-		//	long time = System.currentTimeMillis();
+		while(!frame.empty()){
 			BufferedImage image = toBufferedImage(frame);
 			image = cutImage(image);
 			FileController controller = new FileController();
-			BufferedImage[] result = controller.start(image, color, shape, colorMethod);
-			BufferedImage newImage = result[0];
-			BufferedImage newImage2 = result[1];
+			Result result = controller.start(image, color, shape, colorMethod);
+			BufferedImage newImage = result.getFinImage();
+			BufferedImage newImage2 = null;
+			
+			if(result.getBuffImage().size() > 0){
+				newImage2 = result.getBuffImage().get(0);
+			}
+			
 			fillImage(image, newImage);			
 			moviePanel.setImge(image);
+			
 			if(newImage2 != null){
 				System.out.println("Wykryto");
 				signPanel.setImage(newImage2);
 			}
+			
 			frame = vidControl.getNextFrame();
-		//	long time2 = System.currentTimeMillis();
-		//	System.out.println("Time: " + (time2 - time));
 			temp++;
 		}
 	}

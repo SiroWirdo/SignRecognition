@@ -21,7 +21,6 @@ public class ColorProcessing {
 		float h = 0;
 		float s = 0;
 
-
 		int b = rgb[2];
 		int g = rgb[1];
 		int r = rgb[0];
@@ -45,7 +44,6 @@ public class ColorProcessing {
 			h = 360 - (float) (((57.2957795) * acos));
 		}
 
-
 		hsi[0] = h;
 		hsi[1] = s;
 		hsi[2] = in;
@@ -55,17 +53,13 @@ public class ColorProcessing {
 
 	public BufferedImage colorBinarization(BufferedImage image, String color){
 		BufferedImage newImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
-		//long fintime = 0;
-	//	System.out.println(image.getHeight() + " " + image.getWidth());
 		for(int j = 0; j < image.getHeight(); j++){
 			for(int i = 0; i < image.getWidth(); i++){
 
 				int[] rgbArray =  image.getRaster().getPixel(i, j, new int[image.getRaster().getNumBands()]);
 
-			//	long time = System.currentTimeMillis();
 				float[] hsi = convRGBHSI(rgbArray);
-				//long time2 = System.currentTimeMillis();
-				//fintime += (time2 - time);
+
 				if(color.equals("red")){
 					if(hsi[0] <= 10 || hsi[0] >= 300){
 						newImage.setRGB(i, j, Color.RED.getRGB());
@@ -92,14 +86,13 @@ public class ColorProcessing {
 
 			}
 		}
-	//	System.out.println("final time: " + fintime);
+
 		return newImage;
 	}
 	
 	public BufferedImage colorBinarizationRGB(BufferedImage image, String color){
 		BufferedImage newImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
-		//long fintime = 0;
-	//	System.out.println(image.getHeight() + " " + image.getWidth());
+
 		for(int j = 0; j < image.getHeight(); j++){
 			for(int i = 0; i < image.getWidth(); i++){
 
@@ -115,7 +108,6 @@ public class ColorProcessing {
 				double minYellow = 0;
 				double resYellow = 0;
 				
-				
 				minRed = Math.min(r - g, r - b);
 				minBlue = Math.min(b - r, b - g);
 				minYellow = Math.min(r - b, g - b);
@@ -128,8 +120,6 @@ public class ColorProcessing {
 				
 				if(color.equals("red")){
 					if(resRed > 0 && resBlue <= 0.3 && resYellow <= 0.05){
-			//			System.out.println(res);
-
 						newImage.setRGB(i, j, Color.RED.getRGB());
 					}else{
 						newImage.setRGB(i, j, Color.BLACK.getRGB());
@@ -138,8 +128,6 @@ public class ColorProcessing {
 				
 				if(color.equals("blue")){
 					if(resBlue > 0.03 && resRed == 0 && resYellow == 0){
-			//			System.out.println(res);
-
 						newImage.setRGB(i, j, Color.BLUE.getRGB());
 					}else{
 						newImage.setRGB(i, j, Color.BLACK.getRGB());
@@ -148,8 +136,6 @@ public class ColorProcessing {
 				
 				if(color.equals("yellow")){
 					if(resYellow > 0.1 && resBlue == 0 && resRed > 0.1){
-			//			System.out.println(res);
-
 						newImage.setRGB(i, j, Color.YELLOW.getRGB());
 					}else{
 						newImage.setRGB(i, j, Color.BLACK.getRGB());
@@ -157,7 +143,6 @@ public class ColorProcessing {
 				}
 			}
 		}
-	//	System.out.println("final time: " + fintime);
 		return newImage;
 	}
 	
@@ -178,7 +163,6 @@ public class ColorProcessing {
 				int resRed = 0;
 				double minYellow = 0;
 				int resYellow = 0;
-				
 				
 				minRed = Math.min(r - g, r - b);
 				minBlue = Math.min(b - r, b - g);
@@ -202,7 +186,6 @@ public class ColorProcessing {
 				newImage.setRGB(i, j, newColor.getRGB());
 			}
 		}
-	//	System.out.println("final time: " + fintime);
 		return newImage;
 	}
 }

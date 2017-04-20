@@ -1,6 +1,7 @@
 package logic;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import org.opencv.core.Mat;
 
@@ -9,15 +10,21 @@ public class Result {
 	private double diff;
 	
 	private Mat matImage;
-	private BufferedImage buffImage;
+	private BufferedImage finImage;
+	private ArrayList<BufferedImage> buffImage;
 	
 	public Result(int indx, double diff){
 		this.index = indx;
 		this.diff = diff;
 	}
 	
-	public Result(Mat matIm, BufferedImage buffIm){
+	public Result(Mat matIm, ArrayList<BufferedImage> buffIm){
 		this.matImage = matIm;
+		this.buffImage = buffIm;
+	}
+	
+	public Result(BufferedImage finImage, ArrayList<BufferedImage> buffIm){
+		this.finImage = finImage;
 		this.buffImage = buffIm;
 	}
 	
@@ -41,7 +48,11 @@ public class Result {
 		return matImage;
 	}
 	
-	public BufferedImage getBuffImage(){
+	public ArrayList<BufferedImage> getBuffImage(){
 		return buffImage;
+	}
+	
+	public BufferedImage getFinImage(){
+		return finImage;
 	}
 }

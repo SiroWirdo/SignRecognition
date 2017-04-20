@@ -43,17 +43,17 @@ public class FileController {
 			e.printStackTrace();
 		}
 		System.out.println("stop1");
-		BufferedImage[] edgeImage = edgeProcessing.edgeDetector(hsiImage, color, shape, image);
+		Result edgeImage = edgeProcessing.edgeDetector(hsiImage, color, shape, image);
 
 		BufferedImage[] finalIm = new BufferedImage[3];
-		finalIm[0] = image;
+		/*finalIm[0] = image;
 		finalIm[1] = edgeImage[0];
-		finalIm[2] = edgeImage[1];
+		finalIm[2] = edgeImage[1];*/
 
 		return finalIm;
 	}
 
-	public BufferedImage[] start(BufferedImage image, String color, String shape, String colorMethod){
+	public Result start(BufferedImage image, String color, String shape, String colorMethod){
 		BufferedImage hsiImage = null;
 
 		switch(colorMethod){
@@ -71,7 +71,7 @@ public class FileController {
 			break;
 		}
 
-		BufferedImage[] edgeImage = edgeProcessing.edgeDetector(hsiImage, color, shape, image);
+		Result edgeImage = edgeProcessing.edgeDetector(hsiImage, color, shape, image);
 
 		return edgeImage;
 	}
