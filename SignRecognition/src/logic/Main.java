@@ -7,6 +7,9 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.io.IOException;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -29,52 +32,72 @@ public class Main {
 		String color = "red";
 		String shape = "rectangle";
 		String colorMethod = "hsi";
-		int start = 2310;
+		int start = 0;
 		int length = 300;
 		File file = new File(path);
 		File[] filesList = file.listFiles();
-		
+
 		for(File f : filesList){
 			video = f.getName();
 			System.out.println(video);
-			main.startVideo(path + video, start, length, color, shape, colorMethod);
+			if(video.substring(video.length() - 1).equals("4"))
+				main.startVideo(path, video, start, length, color, shape, colorMethod);
 		}
 		//main.startImage(Settings.SOURCE_PATH + "02 PM 001.png", color, shape);
 
 	}
 
-	public void startVideo(String video, int start, int length, String color, String shape, String colorMethod){
+	public void startVideo(String path, String videoName, int start, int length, String color, String shape, String colorMethod){
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
+		String video = path + videoName;
 		MainMenu menu = MainMenu.getMainMenu();
 		MoviePanel moviePanel = menu.getMoviePanel();
 		SignPanel signPanel = menu.getSignPanel();
+		String resultPath = path + colorMethod + "/";
 
 		VideoControl vidControl = new VideoControl(video, start);
 
 		Mat frame = vidControl.getNextFrame();
-		int temp = 0;
+		int temp = 1;
 
 		while(!frame.empty()){
-			BufferedImage image = toBufferedImage(frame);
-			image = cutImage(image);
-			FileController controller = new FileController();
-			Result result = controller.start(image, color, shape, colorMethod);
-			BufferedImage newImage = result.getFinImage();
-			BufferedImage newImage2 = null;
-			
-			if(result.getBuffImage().size() > 0){
-				newImage2 = result.getBuffImage().get(0);
+			if(temp%5 == 0){
+				double time = 1.0 * temp/30;
+				DecimalFormat df = new DecimalFormat("#.####");
+				df.setRoundingMode(RoundingMode.CEILING);
+				String timeString = df.format(time);
+				BufferedImage image = toBufferedImage(frame);
+				image = cutImage(image);
+				FileController controller = new FileController();
+				Result result = controller.start(image, color, shape, colorMethod);
+				BufferedImage newImage = result.getFinImage();
+				BufferedImage newImage2 = null;
+
+				int counter = 0;
+				ArrayList<BufferedImage> resultImages = result.getBuffImage();
+				while(counter < resultImages.size()){
+					String resultName = videoName + "-" + timeString;
+					newImage2 = result.getBuffImage().get(counter);
+					resultName += "-" + counter + ".png";
+					try {
+						File outputfile = new File(resultPath + resultName);
+						ImageIO.write(newImage2, "png", outputfile);
+					} catch (IOException e) {
+						System.out.println("B³¹d zapisu pliku");
+					}
+
+					counter++;
+				}
+
+				fillImage(image, newImage);			
+				moviePanel.setImge(image);
+
+				if(newImage2 != null){
+					System.out.println("Wykryto");
+					signPanel.setImage(newImage2);
+				}
 			}
-			
-			fillImage(image, newImage);			
-			moviePanel.setImge(image);
-			
-			if(newImage2 != null){
-				System.out.println("Wykryto");
-				signPanel.setImage(newImage2);
-			}
-			
 			frame = vidControl.getNextFrame();
 			temp++;
 		}
@@ -108,7 +131,7 @@ public class Main {
 		return image;
 
 	}
-	
+
 
 
 	public void displayImage(Image img2){   
